@@ -44,4 +44,5 @@ $sites = array (
   'consultant360.com' => '2018.consultant360.com',
   'www.2018.consultant360.com' => '2018.consultant360.com',
   'www.consultant360.com' => '2018.consultant360.com',
+  'c360.localhost' => '2018.consultant360.com',
 );

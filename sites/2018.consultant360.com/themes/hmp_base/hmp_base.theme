@@ -1,4 +1,4 @@
-<?
+<?php
 
 $GLOBALS['channel'] = hmp_base_detect_channel();
 

@@ -1,4 +1,11 @@
 jQuery(function($) {
+
+	$('img').each(function(){
+		console.log($(this));
+		var s = $(this).attr('src');
+		var link = s.replace('http://c360.localhost/','http://consultant360.com/');
+        $(this).attr('src', 'http://consultant360.com' + link);
+    });
 /*
 	if($('#block-views-block-article-page-block-1').length) {
 		$('#block-views-block-article-page-block-1').appendTo('#block-articlesidebarheader');
