@@ -1,0 +1,73 @@
+<style>
+/************************
+***MAIN CHANNEL STYLES***
+************************/
+{{class}} #header-wrap a#site-logo {
+	background: url('{{logo}}') no-repeat;
+	background-size: 100% 100%;
+}
+@media (min-width: 768px) {
+	{{class}} #header-wrap a#site-logo {
+		background-size: auto 100%;
+	}
+}
+{{class}} .header-right li:nth-child(2) a,
+{{class}} #block-hmp-base-local-tasks ul li a,
+{{class}} #navigation-wrap #navigation #mobile-toggle span.x-menu span
+ {
+	background: {{color}};
+}
+
+{{class}} .content-type-Video .views-field-field-image .field-content:after {
+	background: url('/sites/2018.consultant360.com/themes/hmp_base/img/Play-Button-Clear.svg') no-repeat {{color}};
+	background-size: 100%;
+}
+{{class}} .content-type-Podcast .views-field-field-image .field-content:after {
+	background: url('/sites/2018.consultant360.com/themes/hmp_base/img/Play-Button.svg') no-repeat {{color}};
+	background-size: 100%;
+}
+{{class}}.page-node-type-channel #main header a,
+{{class}}.page-node-type-resource-center #main header a,
+{{class}}.page-node-type-microsite #main header a,
+{{class}} .guest-editors-block header a
+{
+	background: url(/sites/2018.consultant360.com/themes/hmp_base/img/More-Arrow-Red.svg) no-repeat {{color}};
+	background-size: 100%;
+}
+{{class}} #main-content h2,
+{{class}} #main-content h3,
+{{class}} #fsSubmitButton3119695,
+{{class}} #under-content h2,
+{{class}} .views-field-field-section,
+{{class}} .title-image-feature-block .views-row .views-field-field-section,
+{{class}} .path-index #main-content header header h1,
+{{class}} article a,
+{{class}} nav#block-hmp-base-main-menu a:hover {
+	color: {{color}};
+}
+{{class}} #main header,
+{{class}} .sidebar-gray,
+{{class}} article h1,
+{{class}} .path-index #main-content,
+{{class}} #under-content header,
+{{class}} .title-image-feature-block .views-row .views-field-field-section,
+{{class}} .path-index #main-content header header h1 {
+	border-color: {{color}}!important;
+}
+
+{{class}} #navigation-wrap #navigation #standard-nav nav#block-hmp-base-main-menu > ul > li:after {
+	border-color: {{color}}!important;
+}
+{{class}} #c360-banner {
+	/*background-image:url(/sites/all/modules/custom/hmp_channel/img/Consultant360-Logo_4C-Rev.svg);*/
+	background-image: {{bk-image}};
+	background-repeat:no-repeat;background-size: auto 16px;
+	background-position: 95% 6px;
+}
+{{class}}{{microsite}} #header-wrap a#site-logo {
+	background-image: {{micro-image}};
+	background-repeat:no-repeat;
+	background-size:auto 100%;
+	background-position-x: center;
+}
+</style>

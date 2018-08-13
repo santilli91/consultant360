@@ -1,0 +1,158 @@
+{#
+/**
+ * @file
+ * Theme override for the basic structure of a single Drupal page.
+ *
+ * Variables:
+ * - logged_in: A flag indicating if user is logged in.
+ * - root_path: The root path of the current page (e.g., node, admin, user).
+ * - node_type: The content type for the current node, if the page is a node.
+ * - head_title: List of text elements that make up the head_title variable.
+ *   May contain one or more of the following:
+ *   - title: The title of the page.
+ *   - name: The name of the site.
+ *   - slogan: The slogan of the site.
+ * - page_top: Initial rendered markup. This should be printed before 'page'.
+ * - page: The rendered page markup.
+ * - page_bottom: Closing rendered markup. This variable should be printed after
+ *   'page'.
+ * - db_offline: A flag indicating if the database is offline.
+ * - placeholder_token: The token for generating head, css, js and js-bottom
+ *   placeholders.
+ *
+ * @see template_preprocess_html()
+ */
+#}
+{%
+  set body_classes = [
+    logged_in ? 'user-logged-in',
+    not root_path ? 'path-frontpage' : 'path-' ~ root_path|clean_class,
+    node_type ? 'page-node-type-' ~ node_type|clean_class,
+    db_offline ? 'db-offline',
+    channel_class,
+  ]
+%}
+<!DOCTYPE html>
+<html{{ html_attributes }}>
+  <head>
+    <head-placeholder token="{{ placeholder_token|raw }}">
+    <title>{{ head_title|safe_join(' | ') }}</title>
+    <css-placeholder token="{{ placeholder_token|raw }}">
+    <js-placeholder token="{{ placeholder_token|raw }}">
+    
+    <!-- BEGIN ADVERTSERVE CODE -->
+    <script type="text/javascript">
+    var _avp = _avp || [];
+    (function() {
+      var s = document.createElement('script');
+      s.type = 'text/javascript'; s.async = true; s.src = 'https://hmpads.advertserve.com/js/libcode3.js';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+    })();
+    </script>
+    <!-- END ADVERTSERVE CODE -->
+          <!-- Cookie bot.  GDPR Code -->
+  <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="0261c0fa-fa0e-4a25-8c97-2dbe8c7bbfb1" type="text/javascript" async></script>
+  <!-- End GDPR Cookiebot -->
+
+<!-- Start of Woopra Code -->
+<script>
+(function(){
+        var t,i,e,n=window,o=document,a=arguments,s="script",r=["config","track","identify","visit","push","call","trackForm","trackClick"],c=function(){var t,i=this;for(i._e=[],t=0;r.length>t;t++)(function(t){i[t]=function(){return i._e.push([t].concat(Array.prototype.slice.call(arguments,0))),i}})(r[t])};for(n._w=n._w||{},t=0;a.length>t;t++)n._w[a[t]]=n[a[t]]=n[a[t]]||new c;i=o.createElement(s),i.async=1,i.src="//static.woopra.com/js/w.js",e=o.getElementsByTagName(s)[0],e.parentNode.insertBefore(i,e)
+})("woopra");
+
+woopra.config({
+    domain: 'consultant360.com'
+});
+{% if hmp_email != '' %}
+woopra.identify({
+    email: "{{hmp_email}}",
+});
+{% endif %}
+
+woopra.track("pv",{
+    channel: "{{hmp_channel}}",
+    resource: "{{hmp_resource}}",
+    microsite: "{{hmp_micro}}",
+    url: window.location.pathname,
+    title: document.title,
+});
+
+</script>
+<!-- End of Woopra Code -->
+<!-- DMD CODE -->
+<script>
+    (function(w,d,s,m,n,t){
+        w[m]=w[m]||{init:function(){(w[m].q=w[m].q||[]).push(arguments);},ready:function(c){if('function'!=typeof c){return;}n.onload=n.onreadystatechange=function(){
+        if(!n.readyState||/loaded|complete/.test(n.readyState)){n.onload=n.onreadystatechange=null;if(t.parentNode&&n.parentNode){t.parentNode.removeChild(n);}if(c){c();}}};}},
+        w[m].d=1*new Date();n=d.createElement(s);t=d.getElementsByTagName(s)[0];n.async=1;n.src='//www.medtargetsystem.com/javascript/beacon.js?v2.5.11';
+        t.parentNode.insertBefore(n,t);
+    })(window,document,'script','AIM');
+
+    AIM.init('7-19-AD638CDE');
+</script>
+<!-- END DMD CODE -->
+
+
+<!--- Cookie Ads -->
+<script>
+(function() {
+  if (window.location.search) {
+     if (window.location.search.indexOf("eclick=stelara") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=A8IP2HSSS0A4OLJM';
+    }
+     if (window.location.search.indexOf("eclick=tremfya") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=RKFVIOQCKGSAV7X0';
+    }
+      if (window.location.search.indexOf("eclick=vascepa_card") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=TL20NCCKH2DN5IOS';
+    }
+      if (window.location.search.indexOf("eclick=vascepa_endo") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=AS6XPTGWD6XW0LIB';
+    }
+    if (window.location.search.indexOf("eclick=vascepa_pcp") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=VHCSIOFKWENRI7DU';
+    }
+
+  if (window.location.search.indexOf("eclick=Gilenya") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=MRJMZFJ8CBZG3TCQ';
+    }
+    
+    if (window.location.search.indexOf("eclick=promacta360") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=AWLFHTW0BDIM6IP4';
+    }
+     if (window.location.search.indexOf("eclick=C360-Trelegy") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=MJVVMXTGZ9PYWXZC';
+    }
+    if (window.location.search.indexOf("eclick=C360-Entresto") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=K8VBPGQTZML8G0LX';
+    }
+     if (window.location.search.indexOf("eclick=C360-PrepH-No") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=H55HYXCWLFFQ7FIF';
+    }
+  if (window.location.search.indexOf("eclick=C360-PrepH-Yes") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=LN2IDQCJFWTBXUK9';
+    }
+    if (window.location.search.indexOf("eclick=C360-Aristada") != -1) {
+      new Image().src = 'https://hmpads.advertserve.com/servlet/retargeting?segments=SGONHVKCCOXKJV40';
+    }
+  }
+})();
+</script>
+
+<!-- END COOKIE CODE -->
+  </head>
+  <body{{ attributes.addClass(body_classes) }}>
+    {#
+      Keyboard navigation/accessibility link to main content section in
+      page.html.twig.
+    #}
+    <a href="#main-content" class="visually-hidden focusable">
+      {{ 'Skip to main content'|t }}
+    </a>
+    {{ page_top }}
+    {{ page }}
+    {{ page_bottom }}
+    <js-bottom-placeholder token="{{ placeholder_token|raw }}">
+  </body>
+</html>

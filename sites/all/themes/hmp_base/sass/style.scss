@@ -1,0 +1,468 @@
+
+/*IMPORT STYLE DEPENDENCIES*/
+@import 'content';
+
+
+
+/****************************
+ ******CORE STYLES*********
+ ****************************/
+body {
+	font-family: "acumin-pro-semi-condensed",'sans-serif';
+	padding-bottom: 350px;
+	background: red;
+}
+
+body.user-logged-in{
+	#header-wrap {
+		top:82px;
+	}
+
+	#navigation-wrap{
+		top:134px;
+	}
+}
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+.wrapper {
+	width: 100%;
+}
+
+.fixed {
+	position: fixed;
+}
+
+#main-content-wrap {
+	margin-top: 79px;
+}
+#main-content {
+	padding-top: 25px;
+}
+
+a {
+	color: #000;
+	text-decoration: none;
+}
+a:hover,a:active {
+	text-decoration: none;
+}
+ul {
+	margin: 0;
+	padding: 0;
+}
+li {
+	list-style: none;
+}
+
+#block-hmp-base-page-title{
+	h1{
+		font-size:19px;
+		font-weight:500;
+		border-bottom:2px solid #27377C;
+		padding-bottom:8px;
+	}
+}
+
+h2 {
+	font-size: 28px;
+	font-weight: bold;
+	letter-spacing: -.15px;
+	line-height: 25px;
+	font-family: "grifos",'sans-serif';
+}
+h3 {
+	font-size: 15px;
+	line-height: 17px;
+	letter-spacing: 1.1px;
+	font-family: "acumin-pro-condensed",'sans-seif';
+	font-weight: bold;
+	margin: 5px 0;
+	text-transform: uppercase;
+}
+#wipe{
+	position: fixed;
+	z-index: 50;
+	background: $gray;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+#wipe.expanded {
+	display: block;
+}
+#sidebar,#main {
+	>div >div {
+		margin: 0 auto 45px;
+	}
+}
+
+@media (min-width: $screen-sm-min) {
+	#main-content-wrap {
+		margin-top: 102px;
+	}
+	#main {
+		width: 435px;
+		padding-left: 0;
+		border-right: 1px solid $lgray;
+	}
+	#sidebar {
+		width: 315px;
+		padding-right: 0;
+	}
+	#block-hmp-base-page-title{
+		h1{
+			font-size:28px;
+		}
+	}
+	#wipe {
+		top: 103px;
+		height: 52px;
+		box-shadow: 4px 0px 8px $dgray;
+	}
+}
+@media (min-width: $screen-md-min) {	
+	#main {
+		width: 655px;
+	}
+}
+@media (min-width: $screen-lg-min) {
+	#main {
+		width: 855px;
+	}
+}
+
+
+/*********************************
+**********Leaderboard Ad***********
+*********************************/
+.leaderboard {
+	background: $lgray;
+	padding: 12px 0;
+	text-align: center;
+	display: none;
+}
+
+@media(min-width: $screen-sm-min) {
+	.leaderboard {
+		display: block;
+	}
+}
+
+
+/**************
+*&****&LIST CONTENT****
+**************/
+.path-index {
+	#main {
+		.views-row {
+			padding: 12px 0;
+			border-bottom: 1px solid $gray;
+			.views-field-title {
+				a {
+					font-size: 17px;
+					font-weight: bold;
+					margin-bottom: 8px;
+				}
+			}
+		}
+		header {
+			border-top: 3px solid;
+			border-bottom: 2px solid;
+			margin: 0 0 20px 0;
+			header {
+				border:none;
+				margin: 0;
+				h1 {
+					padding: 2px 0;
+					margin: 0 0 18px;
+				}
+			}
+			.views-row {
+				.views-field-field-image {
+					width: 100%;
+					padding-bottom: 15px;
+				}
+				.views-field-title {
+					a {
+						font-size: 21px;
+						font-weight: bold;
+					}
+				}
+				@media(min-width: $screen-sm-min) {
+					.views-field-field-image {
+						float: left;
+						width: 181px;
+						margin-right: 12px;
+						margin-bottom: 12px;
+					}
+				}
+				@media(min-width: $screen-lg-min) {
+					.views-field-field-image {
+						width: 262px;
+					}
+				}
+			}
+			.views-row:after{		
+				content:' ';
+				clear: both;
+				display: table;
+			}
+		}
+	}
+}
+
+
+/**************
+***FOOTER&*******
+****************/
+#back-to-top {
+	padding: 10px;
+	border-top: 1px solid #000;
+	text-align: right;
+	a {
+		font-family: 'acumin-pro';
+		font-size: 14px;
+		letter-spacing: 0.5px;
+		padding: 8px 45px;
+		margin-right: 45px;
+		display: block;
+		background: url('../img/Back-to-Top.svg') no-repeat;
+		background-size: 30px 30px;
+		background-position: right;
+	}
+}
+@font-face{
+     font-family: 'Acumin';
+     src: url('../font/AcuminPro-Medium.eot');
+    /* IE9 Compat Modes */
+     src: url('../font/AcuminPro-Medium.eot') format('embedded-opentype'), 
+    /* IE6-IE8 */
+     url('../font/AcuminPro-Medium.woff2') format('woff2'), 
+    /* Super Modern Browsers */
+     url('../font/AcuminPro-Medium.woff') format('woff') 
+    /* Pretty Modern Browsers */
+}
+ @font-face{
+     font-family: 'Termina';
+     src: url('../font/termina-heavy-webfont.eot') format('embedded-opentype'), 
+    /* IE6-IE8 */
+     url('../font/termina-heavy-webfont.woff2') format('woff2'), 
+    /* Super Modern Browsers */
+     url('../font/termina-heavy-webfont.woff') format('woff'), 
+    /* Pretty Modern Browsers */
+     url('../font/termina-heavy-webfont.ttf') format('ttf') 
+    /* Pretty Modern Browsers */
+}
+
+#footer {
+	background: #272727;
+}
+#footer,#footer-under {.container {padding: 30px;}}
+#footer-content {
+	background: #272727;
+	padding: 30px 0 0 0;
+
+}
+#footer-logo {
+	display: inline-block;
+	width: 100%;
+	margin: 0 0 60px 0;
+	img {
+		width: 257px;
+	}
+}
+#footer-social, #footer-about {
+	display: inline-block;
+	width: 50%;
+	float: left;
+	margin: 0 0 15px 0;
+	p {
+		color: #fff;
+		font-size: 11px;
+		font-family: Termina;
+	}
+	ul {
+		list-style-type: none;
+		padding: 0;
+		li {
+			margin: 0 0 15px 0;
+			a {
+				color: #fff;
+				font-size: 12.5px;
+				font-family: Acumin;
+				font-weight: 100;
+				text-decoration: none;
+			}
+		}
+		.social-icons {
+			width: 40px;
+			display: inline-block;
+			img {
+				max-width: 23px;
+				height: auto;
+				margin: 0 23px 0 0;
+			}
+		}
+	}
+}
+#footer-other-brands {
+	display: inline-block;
+	width: 100%;
+	margin: 0 0 15px 0;
+	p {
+		color: #fff;
+		font-size: 11px;
+		font-family: Termina;
+	}
+	ul {
+		list-style-type: none;
+		padding: 0;
+		li {
+			margin: 0 0 15px 0;
+			a {
+				color: #fff;
+				font-size: 12.5px;
+				font-family: Acumin;
+				font-weight: 100;
+				text-decoration: none;
+			}
+		}
+	}
+}
+#footer-under {
+	display: inline-block;
+	background: #4A4A4A;
+	width: 100%;
+	padding: 0 0 15px 0;
+	.hmp-brand-logo {
+		margin: 15px 0 30px 0;
+		img {
+			width: 291px;
+		}
+	}
+	.hmp-logo {
+		img {
+			width: 63px;
+		}
+	}
+	.fine {
+		font-size: 8.5px;
+		width: 100%;
+		color: #fff;
+	}
+}
+
+@media(min-width: $screen-sm-min) {
+	#footer-logo {
+		margin: 0 0 90px 0;
+		img {
+			width: 300px;
+		}
+	}
+	#footer-content {
+		padding: 30px 30px 15px 30px;
+		.footer-blocks {
+			float: left;
+		}
+	}
+	#footer-social, #footer-about {
+		min-height: 240px;
+		width: 169px;
+		border-left: #707070 solid 1px;	
+		p {
+			padding-left: 16px;
+			margin: 0;
+		}
+		ul {
+			padding: 15px 0 0 16px;
+		}
+	}
+	#footer-other-brands {
+		min-height: 240px;
+		width: auto;
+		border-left: #707070 solid 1px;
+		p {
+			padding-left: 16px;
+			margin: 0;
+		}
+		ul {
+			padding: 15px 0 0 16px;
+		}
+	}
+	#footer-under {
+		.hmp-brand-logo {
+		img {
+			width: 356px;
+		}
+	}
+	.hmp-logo {
+		img {
+			width: 68px;
+		}
+	}
+	}
+}
+
+@media(min-width: $screen-md-min) {
+	#footer-logo {
+	    width: 25%;
+	    max-width: 300px;
+	    float: left;
+	    padding: 0 2% 0 0;
+	    img {
+			max-width: 100%;
+	    }
+	}
+	#footer-content {
+		padding: 30px 0 ;
+		#footer-social, #footer-about {
+			width: auto;
+			padding: 0 16px 0 0;
+		}
+		.footer-blocks {
+			float: right;
+		}
+	}
+	#footer-under {
+		width: 100%;
+		padding: 0  0 30px;
+		.hmp-brand-logo {
+			width: 356px;
+    		float: left;
+    		margin: 30px 0 0 0;
+		}
+		.hmp-logo {
+			width: 66px;
+			float: right;
+			margin: 30px 0 0 0;
+		}
+		.fine {
+			wdth: 100%;
+			display: inline-block;
+			text-align: right;
+		}
+	}
+}
+
+@media(min-width: $screen-lg-min) {
+	#footer-logo {
+		width: calc(300px - 2%);
+	}
+	.footer-blocks {
+		width: calc(100% - 300px);
+	    display: flex;
+	    float: right;
+	    flex-direction: row;
+	    justify-content: flex-end;
+	}
+	#footer-content {
+		#footer-social, #footer-about {
+			padding: 0 50px 0 0;
+		}
+	}
+}

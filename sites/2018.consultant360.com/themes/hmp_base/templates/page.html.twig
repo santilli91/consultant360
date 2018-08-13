@@ -1,0 +1,105 @@
+<div id="wipe"></div>
+<div id="page">
+
+<a href="/" id="c360-banner"></a>
+<section class="wrapper fixed" id="header-wrap">
+	<div class="container" id="header">
+		<div class="row">
+			{% if microsite %}
+			<div class="col-xs-10 col-sm-8" id="header-left">
+				<a href="{{ channel_path }}" id="site-logo"></a>
+			</div>
+			
+			<div class="col-xs-2 col-sm-4 header-right" id="header-right">
+				{{ page.header_right }}
+			</div>
+			{% else %}
+			<div class="col-xs-12" id="header-left">
+				<a href="#" id="site-logo"></a>
+			</div>
+			{% endif %}
+		</div>
+	</div>
+</section>
+{% if microsite %}
+<section class="wrapper fixed" id="navigation-wrap">
+	<div class="container" id="navigation">
+		<div class="row">
+			<div id="mobile-toggle" class="col-xs-4"><span class="x-menu"><span></span><span></span><span></span></span></div>
+			<div id="standard-nav" class="col-md-9 col-sm-9">
+				<div id="top-dropdown">
+					<div class="search-toggle"></div><div class="header-right"></div>
+				</div>
+				<div>
+					<nav role="navigation" aria-labelledby="block-hmp-base-main-menu-menu" id="block-hmp-base-main-menu">{{my_custom_menu}}</nav>
+				</div>
+			</div>
+			<div id="right-menu" class="col-md-3 col-sm-3">
+				<div class="search-toggle" id="search-toggle"><div id="search-bar"><script src="https://addsearch.com/js/?key=8755a34b7281c4963f4445dc51058ef4"></script></div></div>
+			</div>
+		</div>
+	</div>
+</section>
+{% endif %}
+<div id="main-content-wrap" class="wrapper">
+	{% if page.leaderboard %}
+	<section id="leaderboard" class="wrapper leaderboard">
+		<div class="container">
+			{{ page.leaderboard }}
+		</div>
+	</section>
+	{% endif %}
+	{% if page.above_content %}
+	<section id="above-content" class="wrapper">
+		<div class="container">
+			{{ page.above_content }}
+		</div>
+	</section>
+	{% endif %}
+
+	{% if page.content %}
+	<section id="main-content" class="container">
+		<div class="row">
+			{% if page.skyscraper %}
+			<div class="skyscraper-region">
+				{{page.skyscraper}}
+			</div>
+			{% endif %}
+			<div class="col-xs-12 {% if page.aside %}sidebar{% endif %} {% if page.skyscraper %}with-sky col-md-9{% endif %}" id="main"> 
+				{{ page.content }}
+			</div>
+			{% if page.aside %}
+			<aside class="col-xs-12" id="sidebar">
+				{{ page.aside }}
+			</aside>
+			{% endif %}
+		</div>
+	</section>
+	{% endif %}
+	{% if page.middle_leader %}
+	<section class="middle-leader leaderboard" id="middle-leader">
+		<div class="container">
+			{{ page.middle_leader }}
+		</div>
+	</section>
+	{% endif %}
+
+	{% if page.under_content %}
+	<section class="under-content container" id="under-content">
+		{{ page.under_content }}
+	</section>
+	{% endif %}
+
+	{% if page.lower_leader %}
+	<section class="lower-leader leaderboard" id="lower-leader">
+		<div class="container">
+			{{ page.lower_leader }}
+		</div>
+	</section>
+	{% endif %}
+</div>
+{% include '/sites/2018.consultant360.com/themes/hmp_base/templates/footer.html.twig' %}
+</div>
+{% if page.floater %}
+{{page.floater}}
+{% endif %}

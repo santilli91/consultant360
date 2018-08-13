@@ -1,0 +1,15 @@
+hmp_import.import_functions:
+  path: '/import/nodes/d7'
+  defaults:
+    _controller: '\Drupal\hmp_import\Controller\Import::batchRun'
+    _title: 'Import From 7'
+  requirements:
+    _permission: 'administer content'
+
+hmp_import.import_run:
+  path: '/import/nodes/d7/import/{offset}/{qty}'
+  defaults:
+    _controller: '\Drupal\hmp_import\Controller\Import::import'
+    _title: 'Import From 7'
+  requirements:
+    _permission: 'administer content'

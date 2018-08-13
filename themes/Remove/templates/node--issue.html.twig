@@ -1,0 +1,7 @@
+{% set createdDate = node.getCreatedTime|date('F Y') %}
+<article{{ attributes }}>
+  <header>
+  	<h1>{{content.field_channel.0}}</h1>
+  	<h3 id="page-title">{{node.label}}</h3>
+  </header>
+</article>

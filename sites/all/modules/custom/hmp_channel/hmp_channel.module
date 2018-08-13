@@ -1,0 +1,215 @@
+<?php
+
+$GLOBALS['ad_count'] = 0;
+$GLOBALS['proc_ads'] = hmp_channel_proc_request();
+include 'hmp_channel_ads.inc';
+
+function hmp_channel_page_attachments_alter(array &$page) {
+  $page['#attached']['html_head'][] = [
+    [
+      '#tag' => 'style',
+      '#value' => hmp_channel_generateCSS(),
+    ],
+    'hmp_channel'
+  ];
+}
+/*function hmp_channel_entity_presave(Drupal\Core\Entity\EntityInterface $entity) {
+  switch ($entity->bundle()) {
+    case 'channel' || 'resource_center' || 'microsite':
+      hmp_channel_update_css();
+     break;
+  }
+}*/
+
+/*function hmp_channel_cron() {
+	hmp_channel_update_css();
+}
+
+function hmp_channel_update_css() {
+
+	$file = fopen(drupal_get_path('module','hmp_channel') . '/css/channel.css',"w") or die("Unable to open file!: " .  drupal_get_path('module','hmp_channel') . '/css/channel.css');
+	fwrite($file, hmp_channel_generateCSS());
+	fclose($file);
+	drupal_flush_all_caches();
+}*/
+
+function hmp_channel_generateCSS() {
+	$css = '';
+	if(isset($GLOBALS['channel']['channel_nid'])) {
+		$channel = \Drupal\node\Entity\Node::load($GLOBALS['channel']['channel_nid']);
+		
+		ob_start();
+	    include('sites/all/modules/custom/hmp_channel/hmp_channel.css');
+	    $css = ob_get_contents();
+	    $css = str_replace('{{color}}',$channel->field_channel_color->getString(),$css);
+	    $css = str_replace('{{class}}','.'.$GLOBALS['channel']['channel_class'],$css);
+
+	    $tmp = $channel->get('field_channel_logo')->getValue();
+		if($tmp[0]['target_id']) {
+			$file = \Drupal\file\Entity\File::load($tmp[0]['target_id']);
+			$logo_url = file_create_url($file->getFileUri());
+	    	$css = str_replace('{{logo}}',$logo_url,$css);
+	    }
+	    if($GLOBALS['channel']['micro_site_nid'] != 'all') {
+			$micro = \Drupal\node\Entity\Node::load($GLOBALS['channel']['micro_site_nid']);
+			if(isset($micro->field_channel_logo[0]->target_id)) {
+				$tmp = $micro->get('field_channel_logo')->getValue();
+				$file = \Drupal\file\Entity\File::load($tmp[0]['target_id']);
+				$logo_url = file_create_url($file->getFileUri());
+				$css = str_replace('{{micro-image}}',"url($logo_url)",$css);
+				$css = str_replace('{{microsite}}','.microsite-'.$GLOBALS['channel']['micro_site_nid'],$css);
+			} else {
+				$css = str_replace('{{micro-image}}','none',$css);
+				$css = str_replace('{{microsite}}','.none',$css);
+			}
+		}
+		if($GLOBALS['channel']['channel_nid'] != 1793 || $GLOBALS['channel']['micro_site_nid'] != 'all') 
+			$css = str_replace('{{bk-image}}','url(/sites/all/modules/custom/hmp_channel/img/Consultant360-Logo_4C-Rev.svg)',$css);
+		else
+			$css = str_replace('{{bk-image}}','none',$css);
+	    
+	    ob_end_clean();
+	}
+	return $css;
+}
+	/*Channel Styles
+	$channels = \Drupal::database()->select('node','n')->fields('n',['nid'])->condition('n.type','channel','=')->execute();
+	$css = '';
+	foreach($channels as $channel) {
+		$node = \Drupal\node\Entity\Node::load($channel->nid);
+		$class = 'channel-' . strtolower(str_replace(' ','-',$node->field_short_name->getString()));
+		$tmp = $node->get('field_channel_logo')->getValue();
+		if($tmp[0]['target_id']) {
+			$file = \Drupal\file\Entity\File::load($tmp[0]['target_id']);
+			$logo_url = file_create_url($file->getFileUri());
+			$css .= '.' . $class . ' #header-wrap a#site-logo{background:url(' . $logo_url . ') no-repeat;}';
+			$css .= '.' . $class . ' #header-wrap a#site-logo{background-size:auto 100%;}';
+			$css .= '.' . $class . ' #main-content h2,.' . $class . ' #main-content h3, .' . $class . ' #fsSubmitButton3119695,.' . $class . ' #under-content h2, .' . $class . ' .views-field-field-section {color:' . $node->field_channel_color->getString() . ';}';
+			$css .= '.' . $class . ' #main header,.' . $class . ' .sidebar-gray, .' . $class . ' article h1, .' . $class .'.path-index #main-content,.' . $class . ' #under-content header{border-color: ' . $node->field_channel_color->getString() . ';}';
+			$css .= '.' . $class . ' #navigation-wrap #navigation #standard-nav nav#block-hmp-base-main-menu > ul > li:after {border-color: ' . $node->field_channel_color->getString() . ';}';
+			$css .= '.' . $class . ' .header-right li:nth-child(2) a {background-color: ' . $node->field_channel_color->getString() . ';}';
+			$css .= '.' . $class . ' .title-image-feature-block .views-row .views-field-field-section, .' . $class .'.path-index #main-content header header h1 {border-color: ' . $node->field_channel_color->getString() . ';color: ' . $node->field_channel_color->getString() . ';}';
+			if($channel->nid != 1793) {
+				$css .= '.' . $class . ' #c360-banner {background-image:url(/sites/all/modules/custom/hmp_channel/img/Consultant360-Logo_4C-Rev.svg); background-repeat:no-repeat;background-size: auto 16px; background-position: 95% 6px;}'; 
+			}
+		}
+	}
+
+	//Resource center styles
+	$centers = \Drupal::database()->select('node','n')->fields('n',['nid'])->condition('n.type','resource_center','=')->execute();
+	foreach($centers as $center) {
+		$node = \Drupal\node\Entity\Node::load($center->nid);
+		if(isset($node->field_channel_logo[0]->target_id)) {
+			$tmp = $node->get('field_channel_logo')->getValue();
+			$file = \Drupal\file\Entity\File::load($tmp[0]['target_id']);
+			$logo_url = file_create_url($file->getFileUri());
+			$css .= '.resource-center-' . $center->nid . ' #header-wrap a#site-logo{background:url(' . $logo_url . ') no-repeat;}';
+			$css .= '.resource-center-' . $center->nid . ' #header-wrap a#site-logo{background-size:auto 100%;}';
+		}
+	}
+
+	//Microsite Styles
+	$microsites = \Drupal::database()->select('node','n')->fields('n',['nid'])->condition('n.type','microsite','=')->execute();
+	foreach($microsites as $microsite) {
+		$node = \Drupal\node\Entity\Node::load($microsite->nid);
+		if(isset($node->field_channel_logo[0]->target_id)) {
+			$tmp = $node->get('field_channel_logo')->getValue();
+			$file = \Drupal\file\Entity\File::load($tmp[0]['target_id']);
+			$logo_url = file_create_url($file->getFileUri());
+			$css .= '.microsite-' . $microsite->nid . ' #header-wrap a#site-logo{background:url(' . $logo_url . ') no-repeat;}';
+			$css .= '.microsite-' . $microsite->nid . ' #header-wrap a#site-logo{background-size:auto 100%;
+				background-position-x: center;}';
+		}
+		$css .= '.microsite-' . $microsite->nid . ' #c360-banner {background-image:url(/sites/all/modules/custom/hmp_channel/img/Consultant360-Logo_4C-Rev.svg); background-repeat:no-repeat;background-size: auto 16px; background-position: 95% 6px;}'; 
+	}*/
+
+
+/**
+ ** Generate Ad Code
+ **/
+function hmp_channel_get_ad_code($zid, $mac = '',$ad_size = 0) {
+	$jcode = hmp_channel_get_ad($ad_size);
+	if($jcode)
+		$ad_code = $jcode;
+	else if($ad_size == 'crawler') {
+		$token = hmp_channel_ads();
+		$ad_code = "<div id='crawler_$mac'><script type=\"text/javascript\">
+document.write('<scr'+'ipt src=\"https://hmpads.advertserve.com/servlet/view/banner/javascript/zone?zid=$zid&pid=0&crawler=true&align=center&custom1=$token&closeable=false&polite=false&spacing=10&bgcolor=transparent&resolution='+(window.innerWidth||screen.width)+'x'+(window.innerHeight||screen.height)+'&random='+Math.floor(89999999*Math.random()+10000000)+'&millis='+new Date().getTime()+'&referrer='+encodeURIComponent((window!=top&&window.location.ancestorOrigins)?window.location.ancestorOrigins[window.location.ancestorOrigins.length-1]:document.location)+'\" type=\"text/javascript\"></scr'+'ipt>');
+</script></div>";
+	}
+	else {
+		$token = hmp_channel_ads();
+		$id = "avp_zid_" . $zid . $mac;
+		$c = $GLOBALS['ad_count'];
+		$ad_code = "<div id='$id'>
+	    <script type='text/javascript'>
+	    _avp.push({ tagid: '$id', alias: '/', type: 'banner', zid: $zid, pid: 0, custom1: '$token' });
+	    </script>
+	    </div>";
+	    $c++;
+	    $GLOBALS['ad_count'] = $c;
+	}
+    return $ad_code;
+}
+
+/*
+ * Make Proclivity Request
+ */
+function hmp_channel_proc_request() {
+	if(isset($_COOKIE['tar_enc_npi'])) {
+		$npi =  hash('sha256',$_COOKIE['tar_npi']);
+		//echo $npi; exit;
+		$url = 'https://layerrx.pswec.com/api/v2/foresite/';
+		$cid = 'cid=' . $npi;
+		//$cid = 'cid=6aba1fe79d358da49a70a3da6c13b03ae8e51dd5cc7d41864517235bd0a7c1b7';
+		$pubid = '&pubid=635';
+		$siteid = '&siteid=63502';
+		$smap = '&smap=' . '(728x90,1),(300x250,1)';
+
+		$url .= $cid . $pubid . $siteid . $smap;
+		try {
+			$response = \Drupal::httpClient()->get($url, array('headers' => array(
+				'Content-Type' => 'text/xml; charset=UTF-8',
+		    	'Authorization'=>'dee8295dd175b7e0bd5bb9c604191c22d8c5d3f785e30a50ef55b43b00bb80d6530441826ca79b1cd5d9c857662d9f2059a261a4a5a2593e36eb8fdda915a114'
+			)));
+		  
+		  $data = json_decode($response->getBody());
+		  $ads = array();
+		  foreach($data->ads as $ad) {
+			$size = $ad->w . 'x' . $ad->h;
+			$ads[$size][] = $ad;
+		  }
+
+		  return $ads;
+		}
+		catch (RequestException $e) {
+		    return FALSE;
+		}
+	}
+	return null;
+}
+
+/*
+ * Determine if proc ad should be aquired, return null if not
+ */
+function hmp_channel_get_ad($size) {
+		
+	$jcode = null;
+	
+	foreach($GLOBALS['ad_code'][$size] as $key=>$ad) {
+		$jcode = "<script type='text/javascript'>
+	    var _up = [
+	        ['h', '$ad->h'],
+	        ['w', '$ad->w'],
+	        ['t', 'i'],
+	        ['cid','" . $GLOBALS['npi'] . "'],
+	        ['asid','" . $ad->asid . "']]; </script>
+		<script type='text/javascript' src='https://adjs.pswec.com/showad.js'></script><br>";
+		unset($GLOBALS['ad_code'][$size][$key]);
+		
+		return $jcode;
+	}	
+	
+	return $jcode;
+}
+?>

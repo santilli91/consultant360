@@ -1,0 +1,9 @@
+channel:
+  version: 1.x
+  css:
+    all:
+  js:
+    scripts.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

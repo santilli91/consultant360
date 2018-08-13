@@ -1,0 +1,26 @@
+<?
+
+
+
+/**
+ * Preprocess HTML file for piwik code
+ **/
+function hmp_matomo_preprocess_html(&$vars) {
+	$email = null;
+	$uid = \Drupal::currentUser()->id();
+	if($uid != 0) {
+		$user = Drupal\user\Entity\User::load($uid);
+		$email = base64_encode($user->mail->value);
+	}
+	if($_GET['hmpid']) {
+		if(strpos($_GET['hmpid'],'@'))
+			$email = base64_encode($_GET['hmpid']);
+		else
+			$email =  $_GET['hmpid'];
+	}
+
+	$vars['hmp_email'] = $email;
+	$vars['hmp_channel'] = $GLOBALS['channel']['channel_name'];
+	$vars['hmp_resource'] = $GLOBALS['channel']['resource_center_title'];
+	$vars['hmp_micro'] = $GLOBALS['channel']['micro_site_title'];
+}

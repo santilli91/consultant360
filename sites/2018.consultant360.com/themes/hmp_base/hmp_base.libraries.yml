@@ -1,0 +1,13 @@
+global:
+  version: 1.00
+  css:
+    base:
+      css/style.css: {}
+      https://use.typekit.net/yzj0ezo.css: {}
+      /modules/custom/hmp_channel/css/channel.css: {}
+  js:
+    js/scripts.js: {}
+    js/menu.js: {}
+    js/article.js: {}
+  dependencies:
+    - core/jquery

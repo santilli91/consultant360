@@ -1,0 +1,10 @@
+<?php
+function hmp_import_page_attachments(array &$attachments) {
+
+	$current_path = \Drupal::request()->getRequestUri();
+	$current_path = explode('?',$current_path);
+	if($current_path[0] == '/import/nodes/d7') 
+  		$attachments['#attached']['library'][] = 'hmp_import/importer';
+
+
+} ?>

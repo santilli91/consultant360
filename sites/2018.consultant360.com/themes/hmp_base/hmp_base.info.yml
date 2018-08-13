@@ -1,0 +1,23 @@
+name: HMP Base C360
+description: 'C360 Channel Theme'
+version: 1.00
+type: theme
+package: HMP
+core: 8.x
+screenshot: screenshot.png
+
+libraries:
+ - hmp_base/global
+
+regions:
+ logo: logo
+ header_right: Header Right
+ skyscraper: Skyscraper
+ leaderboard: Leaderboard
+ above_content: Above Content
+ content: Content
+ aside: Sidebar
+ middle_leader: Middle Leaderboard
+ lower_leader: Lower Leaderboard
+ under_content: Under Content
+ floater: Floater

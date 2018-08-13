@@ -1,0 +1,22 @@
+<div class="upper">
+	<div class="left-sidebar">
+		{{topic_bar}}
+	</div>
+	<div class="exclusives-box">
+		<div class="views-block exclusives-main">
+			{{exclusives_top}}
+		</div>
+		<div class="views-block exclusives-lower">
+			{{ exclusives_bottom }}
+		</div>
+	</div>
+</div>
+<div class="middle">
+	{% for view in main_views %}
+		<div class="{{view.classes}}">
+			{{ view.view }}
+		</div>
+	{% endfor %}
+</div>
+<div class="lower">
+</div>

@@ -1,0 +1,13 @@
+{% set createdDate = node.getCreatedTime|date('F Y') %}
+<article{{ attributes }}>
+  <h3>{% if content.field_topics.0 %}{{content.field_topics.0}}{% else %}{{node.bundle}}{% endif %}</h3>
+  <h1 id="page-title">{{node.label}}</h1>
+  {% if content.field_issue.0 %}
+  <div class="article-issue">Consultant: {{content.field_issue.0}}</div>
+  {% endif %}
+  {% if content.field_authors.0 %}
+  <div class="article-authors">{{content.field_authors.0}}</div>
+  {% endif %}
+  {{content.addtoany}}
+  {{body_copy}}
+</article>

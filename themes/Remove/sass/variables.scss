@@ -1,0 +1,46 @@
+@import 'bootstrap';
+
+@font-face {
+  font-family: 'grifos';
+  src:  url(../css/grifos-bold-webfont.woff);
+  font-weight: bold;
+}
+
+/**********DOCUMENTATION**********/
+/*
+SEARCHABLE ITEMS:
+COLOR VARIABLES
+
+REQUIRED BY:
+style.scss
+*/
+/**********END DOCUMENTATION**********/
+
+/*COLOR VARIABLES*/
+$red: #C02127;
+$lblue: #5575FF;
+$gray: #D5D5D5;
+$dgray: #646464;
+$lgray: #F0F0F0;
+
+/*Sizes*/
+$headerHeight: 144px;
+$headerHeightScrolled: 85px;
+
+
+/*Social Icons*/
+$facebook:url('../img/facebook_icon.png');
+$twitter:url('../img/twitter_icon.png');
+$linkedin:url('../img/linkedin_icon.png');
+
+/*ICONS*/
+$pageRight:url('../img/Video-Carousel-Arrow-Right.svg') no-repeat;
+$pageLeft:url('../img/Video-Carousel-Arrow-Left.svg') no-repeat;
+$arrow:url('../img/More-Arrow-Right.svg') no-repeat;
+$search:url('../img/Search-Icon.svg') no-repeat;
+
+/*BREAKPOINT VARIABLES*/
+$mobile: 768px;
+$mid: 991px;
+$large: 1200px;
+$xlarge: 1920px;

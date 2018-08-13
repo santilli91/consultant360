@@ -1,0 +1,6 @@
+name: HMP Channel
+description: Channels helper module
+package: HMP Custom
+type: module
+version: 1.0
+core: 8.x

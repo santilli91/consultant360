@@ -1,0 +1,314 @@
+<?
+
+$GLOBALS['channel'] = hmp_base_detect_channel();
+
+
+/**
+ ** Detect the current parameters of the current page
+ ** Channel / Resource Center / Micro Site 
+ ** On these pages, or on a page related to these?
+ **/
+function hmp_base_detect_channel() {
+  $attributes = array(
+    'channel_class' => 'channel-consultant',
+    'channel_nid' => 1793,
+    'channel_menu' => 'main',
+    'channel_path' => '/',
+    'channel_name' => 'Consultant360',
+    'channel_shortname' => 'consultant',
+    'sidebar' => false,
+    'resource_center_class' => null,
+    'resource_center_nid' => 'all',
+    'resource_center_title' => null,
+    'micro_site_nid' => 'all',
+    'micro_site_class' => null,
+    'micro_site_title' => null,
+  );
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    $attributes = hmp_base_get_info_by_node($node,$attributes);
+  } else {
+    $attributes = hmp_base_get_info_by_path($attributes);
+  }
+  return $attributes;
+}
+
+
+/**
+ ** Get all attributes based on the current node page
+ **/
+function hmp_base_get_info_by_node($node,$attributes) {
+  
+  if($node->type->entity->label() == 'Channel') {
+    $attributes['sidebar'] = true;
+    $attributes['channel_class'] ='channel-' . $node->field_short_name->getString();
+    $attributes['channel_shortname'] = $node->field_short_name->getString();
+    $attributes['channel_name'] = $node->title->getString();
+    $attributes['channel_nid'] = $node->nid->getString();
+    $attributes['channel_menu'] = $node->field_menu_machine_name->getString();
+    $attributes['channel_path'] = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$node->nid->getString());
+  } else if ($node->hasField('field_channel')){
+    $channel = \Drupal\node\Entity\Node::load($node->field_channel->getString());
+    $attributes['channel_class'] = 'channel-' . $channel->field_short_name->getString();
+    $attributes['channel_shortname'] = $channel->field_short_name->getString();
+    $attributes['channel_name'] = $channel->title->getString();
+    $attributes['channel_nid'] = $channel->nid->getString();
+    $attributes['channel_menu'] = $channel->field_menu_machine_name->getString();
+    $attributes['channel_path'] = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$channel->nid->getString());
+    if($node->type->entity->label() == 'Resource Center') {
+      $attributes['sidebar'] = true;
+      $attributes['resource_center_nid'] = $node->nid->getString();
+      $attributes['resource_center_title'] = $node->title->getString();
+      $attributes['resource_center_class'] = 'resource-center resource-center-' . $node->nid->getString();
+    }
+    else if($node->type->entity->label() == 'Microsite') {
+      $attributes['sidebar'] = true;
+      $attributes['micro_site_nid'] = $node->nid->getString();
+      $attributes['micro_site_title'] = $node->title->getString();
+      $attributes['micro_site_class'] = 'microsite microsite-' . $node->nid->getString();
+    }
+    else if($node->hasField('field_resource_center')){
+      $id = $node->get('field_resource_center')->getValue();
+      if($id[0]['target_id']) {
+        $center = \Drupal\node\Entity\Node::load($id[0]['target_id']);
+        $attributes['resource_center_nid'] = $id[0]['target_id'];
+        $attributes['resource_center_title'] = $center->title->getString();
+      }
+    }
+  }
+  return $attributes;
+}
+
+/**
+ ** Get all attributes based on a path
+ **/
+function hmp_base_get_info_by_path($attributes) {
+  $path = $current_path = \Drupal::service('path.current')->getPath();
+  $args = explode('/',$path);
+  if($args[1] == 'index') {
+    $channel = \Drupal\node\Entity\Node::load(hmp_base_get_channel_by_shortname_url());
+    $attributes['sidebar'] = true;
+    $attributes['channel_class'] ='channel-' . $channel->field_short_name->getString();
+    $attributes['channel_nid'] = $channel->nid->getString();
+    $attributes['channel_menu'] = $channel->field_menu_machine_name->getString();
+    $attributes['channel_path'] = \Drupal::service('path.alias_manager')->getAliasByPath('/node/'.$channel->nid->getString());
+    if(isset($args[4]) && is_numeric($args[4])) {
+      $center = \Drupal\node\Entity\Node::load($args[4]);
+      $attributes['sidebar'] = true;
+      $attributes['resource_center_nid'] = $center->nid->getString();
+      $attributes['resource_center_title'] = $center->title->getString();
+      $attributes['resource_center_class'] = 'resource-center resource-center-' . $center->nid->getString();
+    }
+  }
+  return $attributes;
+}
+
+/**
+ ** Preprocess HTML:
+ ** Body Classes from Globals
+ **/
+function hmp_base_preprocess_html(&$var) {
+  $var['channel_class'] = $GLOBALS['channel']['channel_class'] . ' ' . $GLOBALS['channel']['resource_center_class'] . ' ' . $GLOBALS['channel']['micro_site_class'];
+}
+
+/** 
+ ** Preprocess Page:
+ ** Logic variables for header updates
+ ** Menu Loader
+ **/
+function hmp_base_preprocess_page(&$var) {
+  $var['channel_path'] = $GLOBALS['channel']['channel_path'];
+  $var['microsite'] = $GLOBALS['channel']['micro_site_nid'] == 'all'?TRUE:FALSE;
+  $menu_parameters = new \Drupal\Core\Menu\MenuTreeParameters();
+  $menu_parameters->setMaxDepth(2);
+
+  $menu_tree_service = \Drupal::service('menu.link_tree');
+  $tree = $menu_tree_service->load($GLOBALS['channel']['channel_menu'],$menu_parameters);
+  $var['my_custom_menu'] = $menu_tree_service->build($tree);
+  $var['enews_form'] = t(hmp_base_enewsForm());
+}
+
+/**
+ ** Preprocess Node:
+ ** Handle Channel, Resource Center, and Microsite Block Layouts
+ **/
+function hmp_base_preprocess_node(&$var) {
+  if($var['node']->type->entity->label() == 'Article') {
+    $var['body_copy'] = views_embed_view('article_body','block_1',$var['node']->id());
+  }
+  if($var['node']->type->entity->label() == 'Channel' ||
+    $var['node']->type->entity->label() ==  'Resource Center' ||
+    $var['node']->type->entity->label() == 'Microsite') {
+    $var = hmp_base_get_blocks($var);
+    $var = hmp_base_get_exclusives_blocks($var);
+    $var = hmp_base_get_list_blocks($var);
+  }
+}
+
+/**
+ ** Load in the request zone in the top left region
+ ** Skyscraper ad or list page
+ ** Channel list, Topic List, or Resource Center List
+ **/
+function hmp_base_get_list_blocks($var) {
+  $option = $var['node']->get('field_ad_list')->getString();
+  switch($option) {
+    case 'skyscraper':
+      $var['topic_bar'] = t(hmp_base_get_skyscraper());
+    break;
+    case 'channel':
+      $var['topic_bar'] = views_embed_view('specialties_channels','channels');
+    break;
+    case 'specialties':
+      $var['topic_bar'] = views_embed_view('specialties_channels','resource_centers',$GLOBALS['channel']['channel_nid']);
+    break;
+    case 'topics':
+      $var['topic_bar'] = t(hmp_base_get_skyscraper());
+      //$var['topic_bar'] = views_embed_view('specialties_channels','topics',$GLOBALS['channel']['resource_center_nid']);
+    break;
+  }
+  return $var;
+}
+
+/**
+ ** Get Skyscraper ad code
+ **/
+function hmp_base_get_skyscraper() {
+  return '<div id="skyscraper">
+      <img src="/themes/hmp_base/img/skyscraper.png" />
+    </div>';
+}
+
+/**
+ ** Load in the requested views for the current page
+ ** (Resource Center / Micro Site / Channel Page)
+ **/
+function hmp_base_get_blocks($var) {
+  $blocks = $var['node']->get('field_main_content_blocks')->getValue();
+  $count = 0;
+  foreach($blocks as $block) {
+    $item = Drupal\paragraphs\Entity\Paragraph::load($block['target_id']);
+    if(!isset($item->field_display_type[0]->target_id))
+          break;
+    $view = \Drupal\taxonomy\Entity\Term::load($item->field_display_type[0]->target_id);
+
+    $var['main_views'][$count]['view'] = views_embed_view(
+       $view->field_view_machine_name[0]->value,
+       $view->field_view_display_name[0]->value,
+       $GLOBALS['channel']['channel_nid'],
+       $item->field_section[0]->target_id?$item->field_section[0]->target_id:'all',
+       $GLOBALS['channel']['resource_center_nid'],
+       $GLOBALS['channel']['micro_site_nid']
+     );
+    $var['main_views'][$count]['classes'] = $view->field_classes[0]->value;
+    $count++;
+  }
+  return $var;
+}
+
+/**
+ ** Load in Exclusives Blocks
+ **/
+function hmp_base_get_exclusives_blocks($var) {
+  $title = 'Exclusives';
+  if($GLOBALS['channel']['channel_nid'] != 1793 && $GLOBALS['channel']['resource_center_nid'] != 'all')
+    $title = $GLOBALS['channel']['resource_center_title'];
+  $var['exclusives_top'] = views_embed_view(
+     'exclusives',
+     'top_1',
+     $GLOBALS['channel']['channel_nid'],
+     $GLOBALS['channel']['resource_center_nid'],
+     $GLOBALS['channel']['micro_site_nid'],
+     $title,
+     $GLOBALS['channel']['channel_shortname']
+   );
+  $var['exclusives_bottom'] = views_embed_view(
+     'exclusives',
+     'bottom_6',
+     $GLOBALS['channel']['channel_nid'],
+     $GLOBALS['channel']['resource_center_nid'],
+     $GLOBALS['channel']['micro_site_nid']
+   );
+  return $var;
+}
+
+/**
+ ** Page Attachements:
+ ** Add CSS/JS Libraries to page
+ **/
+function hmp_channel_page_attachments(array &$attachments) {
+  $attachments['#attached']['library'][] = 'hmp_channel/channel';
+}
+
+
+/**
+ ** Preprocess Menu:
+ ** Add Active/inactive classes to main menu
+ **/
+function __hmp_base_preprocess_menu(&$variables, $hook) {
+  if ($hook == 'menu') {
+    $current_path = \Drupal::request()->getRequestUri();
+    $items = $variables['items'];
+
+    foreach ($items as $key => $item) {
+      if($item['is_expanded']) {
+      //  $variables['items'][$key]['attributes']->addClass('not-active');
+      }
+      // Set active to dom element if path of menu item matches current path
+      if ($item['url']->toString() == $current_path) {
+        // Add active link.
+        $variables['items'][$key]['attributes']['class'][] = 'active';
+      } else {
+        // Set active to dom element if path of menu item matches first part of current path
+        $url_fragments = explode('/', $current_path);
+        if (count($url_fragments) > 1 AND '/' . $url_fragments[1] == $item['url']->toString()) {
+          $variables['items'][$key]['attributes']['class'][] = 'active';
+        }
+      }
+    }
+  }
+}
+
+/**
+ ** Shortname Channel Selector:
+ ** Pull Shortname out of url and convert to Channel NID
+ **/
+function hmp_base_get_channel_by_shortname_url() {
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+  $shortname = str_replace('%20',' ',$path_args[2]);
+  $query = \Drupal::database()->select('node_field_data','n');
+  $query->join('node__field_short_name','sn','sn.entity_id = n.nid');
+  $query->fields('n',['nid']);
+  $query->condition('sn.field_short_name_value',$shortname,'=');
+  $cid = $query->execute()->fetchField();
+  if($cid)
+    return $cid;
+  return 1793;
+}
+
+/**
+ ** Taxonomy name finder:
+ ** Pull tax name out of url and convert to Section TID
+ **/
+function hmp_base_get_taxonomy_by_name_url() {
+  $current_path = \Drupal::service('path.current')->getPath();
+  $path_args = explode('/', $current_path);
+  $name = str_replace('%20',' ',$path_args[3]);
+  $query = \Drupal::database()->select('taxonomy_term_field_data','td');
+  $query->fields('td',['tid']);
+  $query->condition('td.name',$name,'=')->condition('vid','section','=');
+  $tid = $query->execute()->fetchField();
+  if($tid)
+    return $tid;
+  return null;
+}
+
+/****
+ *** Enews Form
+ ****/
+function hmp_base_enewsForm() {
+  return '<h4>Stay in the know.</h4><h2>' . $GLOBALS['channel']['channel_name'] . ' Newsletter</h2><script type="text/javascript" src="https://hmp.formstack.com/forms/js.php/c360_enews_2018?field66291701=' . $GLOBALS['channel']['channel_nid'] . ' &no_style_strict=1"></script><noscript><a href="https://hmp.formstack.com/forms/c360_enews_2018?field66291701=' . $GLOBALS['channel']['channel_nid'] . '" title="Online Form">Online Form - C360 ENEWS Signup - 2018</a></noscript>';
+}
+
+
